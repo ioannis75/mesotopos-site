@@ -1,0 +1,10 @@
+# Cloudflare Pages: old WordPress addresses -> new site sections (301)
+/one-column-rooms-list/            /#rooms            301
+/blog/rooms/junior-suite/          /#room-junior      301
+/blog/rooms/double-room/           /#room-honeymoon   301
+/blog/rooms/2-rooms-appartment/    /#room-dome        301
+/gallery-without-header-page/      /#gallery          301
+/contact/                          /#contact          301
+/blog/*                            /                  301
+/wp/*                              /                  301
+/wp-admin/*                        /                  301

@@ -1,0 +1,16 @@
+# Apache / cPanel: old WordPress addresses -> new site sections (301)
+RewriteEngine On
+# force https + no www
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://santorinimesotopossuites.com%{REQUEST_URI} [L,R=301]
+RewriteRule ^one-column-rooms-list/?$ /#rooms [NE,L,R=301]
+RewriteRule ^blog/rooms/junior-suite/?$ /#room-junior [NE,L,R=301]
+RewriteRule ^blog/rooms/double-room/?$ /#room-honeymoon [NE,L,R=301]
+RewriteRule ^blog/rooms/2-rooms-appartment/?$ /#room-dome [NE,L,R=301]
+RewriteRule ^gallery-without-header-page/?$ /#gallery [NE,L,R=301]
+RewriteRule ^contact/?$ /#contact [NE,L,R=301]
+RewriteRule ^(blog|wp|wp-admin|wp-content)(/.*)?$ / [L,R=301]
+# block old PHP endpoints that bots probe
+RewriteRule \.php$ - [F,L]
+Options -Indexes
