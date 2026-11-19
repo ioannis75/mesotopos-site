@@ -378,3 +378,28 @@ T["it"] = dict(
  reviews_link="Recensioni degli ospiti su Booking.com", espa_title="ESPA", espa_alt="Banner di cofinanziamento ESPA (apre la targa informativa)",
  footer_note="Fira · Santorini · Grecia", close="Chiudi", prev="Foto precedente", next="Foto successiva",
 )
+
+# Hero slideshow: the original homepage slider photos (old site), in the original order
+SLIDES = [f"slide-{i}.jpg" for i in range(1, 9)]
+SLIDE_TEXT = {
+ "en": dict(alts=["Pool terrace with lounge chairs","Sunset over the pool terrace","The suites overlooking the island and the sea",
+   "Honeymoon Suite living area","Bright suite bedroom in white tones","Suite living area with Cycladic details",
+   "Pergola daybeds beside the pool","The whitewashed Cycladic suites"],
+   pause="Pause slideshow", play="Play slideshow", prev="Previous photo", next="Next photo", slide="Photo", label="Photos of Santorini Mesotopos Suites"),
+ "el": dict(alts=["Βεράντα της πισίνας με καθίσματα","Ηλιοβασίλεμα στη βεράντα της πισίνας","Οι σουίτες με θέα στο νησί και τη θάλασσα",
+   "Καθιστικό της Honeymoon Suite","Φωτεινό υπνοδωμάτιο σουίτας σε λευκούς τόνους","Καθιστικό σουίτας με κυκλαδίτικες λεπτομέρειες",
+   "Ξαπλώστρες κάτω από πέργκολα δίπλα στην πισίνα","Οι ασβεστωμένες κυκλαδίτικες σουίτες"],
+   pause="Παύση προβολής", play="Αναπαραγωγή προβολής", prev="Προηγούμενη φωτογραφία", next="Επόμενη φωτογραφία", slide="Φωτογραφία", label="Φωτογραφίες του Santorini Mesotopos Suites"),
+ "fr": dict(alts=["Terrasse de la piscine avec fauteuils","Coucher de soleil sur la terrasse de la piscine","Les suites face à l'île et à la mer",
+   "Séjour de la Honeymoon Suite","Chambre lumineuse aux tons blancs","Séjour aux détails cycladiques",
+   "Lits de jour sous pergola près de la piscine","Les suites cycladiques blanchies à la chaux"],
+   pause="Mettre le diaporama en pause", play="Lancer le diaporama", prev="Photo précédente", next="Photo suivante", slide="Photo", label="Photos de Santorini Mesotopos Suites"),
+ "de": dict(alts=["Poolterrasse mit Loungesesseln","Sonnenuntergang über der Poolterrasse","Die Suiten mit Blick über Insel und Meer",
+   "Wohnbereich der Honeymoon Suite","Helles Schlafzimmer in Weißtönen","Wohnbereich mit kykladischen Details",
+   "Liegen unter der Pergola am Pool","Die weiß gekalkten kykladischen Suiten"],
+   pause="Diashow anhalten", play="Diashow abspielen", prev="Vorheriges Foto", next="Nächstes Foto", slide="Foto", label="Fotos der Santorini Mesotopos Suites"),
+ "it": dict(alts=["Terrazza della piscina con poltroncine","Tramonto sulla terrazza della piscina","Le suite affacciate sull'isola e sul mare",
+   "Soggiorno della Honeymoon Suite","Camera luminosa in toni bianchi","Soggiorno con dettagli cicladici",
+   "Lettini sotto il pergolato accanto alla piscina","Le suite cicladiche imbiancate a calce"],
+   pause="Metti in pausa la presentazione", play="Avvia la presentazione", prev="Foto precedente", next="Foto successiva", slide="Foto", label="Foto di Santorini Mesotopos Suites"),
+}

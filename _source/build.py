@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds the static multilingual site for santorinimesotopossuites.com into ../site"""
 import json, os, html
-from texts import T, LANGS
+from texts import T, LANGS, SLIDES, SLIDE_TEXT
 
 SITE = "https://santorinimesotopossuites.com"
 OUT = os.path.join(os.path.dirname(__file__), "..")
@@ -65,12 +65,20 @@ def page(lang):
 
     ld = {"@context":"https://schema.org","@type":"Hotel","name":"Santorini Mesotopos Suites",
           "url":SITE+path_for(lang),"email":EMAIL,"telephone":PHONE_TEL,
-          "image":SITE+"/images/hero-sunset-pool.jpg",
+          "image":SITE+"/images/slides/slide-1.jpg",
           "address":{"@type":"PostalAddress","addressLocality":"Fira","postalCode":"84700","addressRegion":"Santorini","addressCountry":"GR"},
           "checkinTime":"15:00","checkoutTime":"11:00","petsAllowed":False,
           "amenityFeature":[{"@type":"LocationFeatureSpecification","name":n,"value":True} for n in ["Outdoor pool","Jacuzzi","Free Wi-Fi","Free parking"]],
           "sameAs":[FB]}
 
+    st = SLIDE_TEXT[lang]
+    slides_html = "".join(
+        f'<img class="slide{" is-active" if i==0 else ""}" src="{img("slides/"+f)}" alt="{e(st["alts"][i])}" width="1224" height="600"'
+        + (' fetchpriority="high"' if i==0 else ' decoding="async"') + (' aria-hidden="true"' if i else '') + '>'
+        for i,f in enumerate(SLIDES))
+    dots_html = "".join(
+        f'<button type="button" class="sc-dot{" is-active" if i==0 else ""}" data-i="{i}" aria-label="{e(st["slide"])} {i+1} / {len(SLIDES)}"{" aria-current=\"true\"" if i==0 else ""}></button>'
+        for i in range(len(SLIDES)))
     rooms_html = ""
     for key, photos in ROOMS:
         r = t["rooms"][key]
@@ -108,7 +116,7 @@ def page(lang):
 <meta property="og:type" content="website">
 <meta property="og:title" content="{e(t["title"])}">
 <meta property="og:description" content="{e(t["meta_desc"])}">
-<meta property="og:image" content="{SITE}/images/hero-sunset-pool.jpg">
+<meta property="og:image" content="{SITE}/images/slides/slide-1.jpg">
 <meta property="og:url" content="{SITE}{path_for(lang)}">
 <meta name="theme-color" content="#153a5a">
 <link rel="icon" href="{pre}images/favicon.png">
@@ -132,7 +140,7 @@ def page(lang):
 
 <main id="main">
   <section class="hero" aria-labelledby="hero-title">
-    <img src="{img('hero-sunset-pool.jpg')}" alt="{e(t["hero_alt"])}" width="1224" height="600" fetchpriority="high">
+    <div class="slides" role="region" aria-roledescription="carousel" aria-label="{e(st["label"])}">{slides_html}</div>
     <div class="wrap">
       <p class="eyebrow">{e(t["hero_eyebrow"])}</p>
       <h1 id="hero-title">{e(t["hero_title"])}</h1>
@@ -142,6 +150,12 @@ def page(lang):
         <a class="btn btn-light" href="{mail}">{e(t["email_us"])}</a>
       </div>
       <ul class="facts">{"".join(f"<li>{e(x)}</li>" for x in t["hero_facts"])}</ul>
+    </div>
+    <div class="slide-ctrl">
+      <button type="button" class="sc-btn" id="sc-prev" aria-label="{e(st["prev"])}">‹</button>
+      <div class="sc-dots">{dots_html}</div>
+      <button type="button" class="sc-btn" id="sc-pause" aria-label="{e(st["pause"])}" data-pause="{e(st["pause"])}" data-play="{e(st["play"])}"><span aria-hidden="true">❚❚</span></button>
+      <button type="button" class="sc-btn" id="sc-next" aria-label="{e(st["next"])}">›</button>
     </div>
   </section>
 
@@ -287,6 +301,24 @@ def page(lang):
 <script>
 document.getElementById('yr').textContent=new Date().getFullYear();
 document.getElementById('lang-switch').addEventListener('change',function(){{location.href=this.value||'./';}});
+(function(){{
+  var sl=[].slice.call(document.querySelectorAll('.slide')),dots=[].slice.call(document.querySelectorAll('.sc-dot')),pb=document.getElementById('sc-pause'),cur=0,timer=null;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches,playing=!reduce;
+  function go(n){{sl[cur].classList.remove('is-active');sl[cur].setAttribute('aria-hidden','true');dots[cur].classList.remove('is-active');dots[cur].removeAttribute('aria-current');
+    cur=(n+sl.length)%sl.length;sl[cur].classList.add('is-active');sl[cur].removeAttribute('aria-hidden');dots[cur].classList.add('is-active');dots[cur].setAttribute('aria-current','true');}}
+  function start(){{stop();if(playing)timer=setInterval(function(){{go(cur+1);}},6000);}}
+  function stop(){{if(timer)clearInterval(timer);timer=null;}}
+  function setBtn(){{pb.setAttribute('aria-label',playing?pb.dataset.pause:pb.dataset.play);pb.firstElementChild.textContent=playing?'❚❚':'▶';}}
+  document.getElementById('sc-prev').onclick=function(){{go(cur-1);start();}};
+  document.getElementById('sc-next').onclick=function(){{go(cur+1);start();}};
+  dots.forEach(function(d){{d.onclick=function(){{go(+d.dataset.i);start();}};}});
+  pb.onclick=function(){{playing=!playing;setBtn();start();}};
+  var hero=document.querySelector('.hero');
+  hero.addEventListener('mouseenter',stop);hero.addEventListener('mouseleave',start);
+  hero.addEventListener('focusin',stop);hero.addEventListener('focusout',start);
+  document.addEventListener('visibilitychange',function(){{document.hidden?stop():start();}});
+  setBtn();start();
+}})();
 (function(){{
   var links=[].slice.call(document.querySelectorAll('.gal a')),lb=document.getElementById('lb'),im=document.getElementById('lb-img'),cap=document.getElementById('lb-cap'),i=0;
   if(!lb.showModal)return;
